@@ -17,4 +17,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::resource('todos', 'TodosController');
+Route::get('/todo/{id}', 'TodosController@show');
+
+Route::resource('checklist_items', 'Checklist_itemsController');
+Route::resource('user_todo', 'User_todoController');
+
 Route::get('/home', 'HomeController@index')->name('home');
