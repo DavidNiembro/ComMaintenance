@@ -12,13 +12,14 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route("todos");
 });
 
 Auth::routes();
 
 Route::resource('todos', 'TodosController');
-Route::get('/todo/{id}', 'TodosController@show');
+Route::get('/todo/{id}', 'TodosController@show')->name("todo");
+Route::get('/todos', 'TodosController@index')->name("todos");
 
 Route::resource('checklist_items', 'Checklist_itemsController');
 Route::resource('user_todo', 'User_todoController');

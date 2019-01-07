@@ -45,6 +45,8 @@ class Checklist_itemsController extends Controller
           'fkTodo'=>$request->fkTodo
         ]
     );
+    return redirect()->route('todo', ['id' => $request->fkTodo]);
+
 
   }
 

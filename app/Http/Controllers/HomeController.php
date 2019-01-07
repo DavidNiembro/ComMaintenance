@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Todo;
+use App\User_todo;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -23,6 +26,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        //$todos = Todo::all();
+        $todos = [];
+        $id = Auth::id();
+        $test = User_todo::all()->where("fkUser", $id);
+        foreach($test as $t){
+           array_push($todos, $t->todos);
+        }
+        //dd($test);
+        return view('home',compact("todos"));
     }
 }

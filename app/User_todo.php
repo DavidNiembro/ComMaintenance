@@ -15,4 +15,9 @@ class User_todo extends Model
 
     protected $dates = ['deleted_at'];
 
+    public function todos()
+    {
+        return $this->belongsTo('App\Todo', "fkTodo");
+    }
+
 }

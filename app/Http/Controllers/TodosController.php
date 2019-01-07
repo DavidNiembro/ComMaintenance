@@ -36,6 +36,16 @@ class TodosController extends Controller
    */
   public function store(Request $request)
   {
+    $task = Todo::updateOrCreate(
+      [
+        'id' => $request->id
+      ],
+      [
+        'title' => $request->title,
+        'description' => $request->description
+      ]
+  );
+  return redirect('/todos');
     
   }
 
