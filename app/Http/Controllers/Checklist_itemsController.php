@@ -41,7 +41,7 @@ class Checklist_itemsController extends Controller
         [
           'title' => $request->title,
           'description' => $request->description,
-          'state'=>0,
+          'state'=>$request->state == null ? 0 : $request->state,
           'fkTodo'=>$request->fkTodo
         ]
     );
@@ -69,7 +69,6 @@ class Checklist_itemsController extends Controller
    */
   public function edit($id)
   {
-    
   }
 
   /**
@@ -80,7 +79,8 @@ class Checklist_itemsController extends Controller
    */
   public function update($id)
   {
-    
+    dd($id);
+
   }
 
   /**

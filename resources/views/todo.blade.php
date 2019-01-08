@@ -20,7 +20,15 @@
                                                         <p class="card-text">{{ $tache->state ? "Terminée":"A faire"}}</p>
                                                     </div>
                                                     <div class="col-sm-6">
-                                                        <a href="/checklist_items/{{ $tache->id}}" class="btn btn-primary">C'est fait</a>
+                                                    <form method="POST" action="{{ url('checklist_items') }}">
+                                                        {{ csrf_field() }}
+                                                        <input type="hidden" value="{{$tache->id}}" name="id">
+                                                        <input type="hidden" value="{{$tache->title}}" name="title">
+                                                        <input type="hidden" value="{{$tache->description}}" name="description">
+                                                        <input type="hidden" value="1" name="state">
+                                                        <input type="hidden" value="{{$tache->fkTodo}}" name="fkTodo">
+                                                        <button type="submit" class="btn btn-primary">C'est fait</button>
+                                                    </form>
                                                     </div>
                                                 </div>
                                             </div>
