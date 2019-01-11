@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Todo;
-use App\User_todo;
+use App\User_task;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -29,7 +29,7 @@ class HomeController extends Controller
         //$todos = Todo::all();
         $todos = [];
         $id = Auth::id();
-        $test = User_todo::all()->where("fkUser", $id);
+        $test = User_task::all()->where("fkUser", $id);
         foreach($test as $t){
            array_push($todos, $t->todos);
         }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class User_todoController extends Controller 
+class User_taskController extends Controller 
 {
 
   /**
