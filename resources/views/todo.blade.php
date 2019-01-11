@@ -8,7 +8,7 @@
                 <div class="card-header">Todo</div>
                     <div class="container">
                         <div class="row">
-                            @foreach ($todo->taches as $tache)
+                            @foreach ($todo->tasks as $tache)
                             <div class="col-sm-6" style="margin-top:20px">
                                     <div class="card">
                                         <div class="card-body">
@@ -20,7 +20,7 @@
                                                         <p class="card-text">{{ $tache->state ? "Terminée":"A faire"}}</p>
                                                     </div>
                                                     <div class="col-sm-6">
-                                                    <form method="POST" action="{{ url('checklist_items') }}">
+                                                    <form method="POST" action="{{ url('tasks') }}">
                                                         {{ csrf_field() }}
                                                         <input type="hidden" value="{{$tache->id}}" name="id">
                                                         <input type="hidden" value="{{$tache->title}}" name="title">
@@ -42,7 +42,7 @@
             </div>          
             <!-- Modal -->
             <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <form action="{{ url('checklist_items') }}" method="POST">
+            <form action="{{ url('tasks') }}" method="POST">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">

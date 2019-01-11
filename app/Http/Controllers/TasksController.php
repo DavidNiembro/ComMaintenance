@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Todo;
-use App\Checklist_item;
+use App\Task;
 
-class Checklist_itemsController extends Controller 
+class TasksController extends Controller 
 {
 
   /**
@@ -36,7 +36,7 @@ class Checklist_itemsController extends Controller
    */
   public function store(Request $request)
   {
-      $task = Checklist_item::updateOrCreate(
+      $task = Task::updateOrCreate(
         ['id' => $request->id],
         [
           'title' => $request->title,

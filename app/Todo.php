@@ -16,9 +16,9 @@ class Todo extends Model
     protected $dates = ['deleted_at'];
     protected $fillable = ['title', 'description']; 
 
-    public function taches()
+    public function tasks()
     {
-        return $this->hasMany('App\Checklist_item', "fkTodo","id");
+        return $this->hasMany('App\Task', "fkTodo","id");
     }
 
 }

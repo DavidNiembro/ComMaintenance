@@ -5,10 +5,10 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Checklist_item extends Model 
+class Task extends Model 
 {
 
-    protected $table = 'checklist_items';
+    protected $table = 'tasks';
     public $timestamps = true;
 
     use SoftDeletes;

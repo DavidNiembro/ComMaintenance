@@ -58,7 +58,7 @@ class TodosController extends Controller
   public function show($id)
   {
     $todo = Todo::find($id);
-    $todo->taches;
+    $todo->tasks;
     return view('todo', compact("todo"));
   }
 
