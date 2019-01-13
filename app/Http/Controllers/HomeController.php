@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Todo;
 use App\User_task;
+use App\Task;
+
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -30,10 +32,15 @@ class HomeController extends Controller
         $todos = [];
         $id = Auth::id();
         $test = User_task::all()->where("fkUser", $id);
+       
         foreach($test as $t){
-           array_push($todos, $t->todos);
+            $task = $t->task()->first();
+            $todo = $task->todo()->first();
+            if (!in_array($todo, $todos)){
+                array_push($todos, $todo);
+            }
         }
-        //dd($test);
+    
         return view('home',compact("todos"));
     }
 }

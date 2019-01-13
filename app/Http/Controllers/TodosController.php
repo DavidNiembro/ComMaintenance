@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Todo;
+use App\User_task;
+use App\Task;
+
+use Illuminate\Support\Facades\Auth;
 class TodosController extends Controller 
 {
 
@@ -14,8 +18,18 @@ class TodosController extends Controller
    */
   public function index()
   {
-      $todos = Todo::all();
-      
+      $idUser = Auth::id();
+      $test = User_task::all()->where("fkUser", $idUser);
+      $todos=[];
+      foreach($test as $t){
+        $task = $t->task()->first();
+        $taskTodo = $task->todo()->first();
+        if ($taskTodo->id = $task->fkTodo && !in_array($taskTodo,$todos)){
+
+        
+          array_push($todos, $taskTodo);
+        }
+    }
       return view('todos', compact("todos"));
   }
 
@@ -57,9 +71,19 @@ class TodosController extends Controller
    */
   public function show($id)
   {
+   
     $todo = Todo::find($id);
-    $todo->tasks;
-    return view('todo', compact("todo"));
+    $tasks = [];
+    $idUser = Auth::id();
+    $test = User_task::all()->where("fkUser", $idUser);
+    foreach($test as $t){
+        $task = $t->task()->first();
+        $taskTodo = $task->todo()->first();
+        if ($taskTodo->id = $task->fkTodo && $taskTodo->id == $id){
+          array_push($tasks, $t);
+        }
+    }
+    return view('todo', compact("tasks","todo"));
   }
 
   /**

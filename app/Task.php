@@ -16,5 +16,8 @@ class Task extends Model
     protected $dates = ['deleted_at'];
     protected $fillable = ['title', 'description', 'state', 'fkTodo']; 
 
-
+    public function todo()
+    {
+        return $this->belongsTo('App\Todo','fkTodo','id');
+    }
 }
