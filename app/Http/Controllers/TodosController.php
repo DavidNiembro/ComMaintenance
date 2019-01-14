@@ -33,7 +33,7 @@ class TodosController extends Controller
     switch($role){
       case 'admin':{
           $todos = Todo::all();
-          return view('todos',compact("todos"));
+          return view('admin/todos',compact("todos"));
           break;
       }
       case 'user':{
@@ -90,21 +90,32 @@ class TodosController extends Controller
    * @param  int  $id
    * @return Response
    */
-  public function show($id)
+  public function show($id, Request $request)
   {
-   
-    $todo = Todo::find($id);
-    $tasks = [];
-    $idUser = Auth::id();
-    $test = User_task::all()->where("fkUser", $idUser);
-    foreach($test as $t){
-        $task = $t->task()->first();
-        $taskTodo = $task->todo()->first();
-        if ($taskTodo->id = $task->fkTodo && $taskTodo->id == $id){
-          array_push($tasks, $t);
+    $request->user()->authorizeRoles(['admin','user']);
+    $role = $request->user()->roles()->first()->name;
+    switch($role){
+      case 'admin':{
+        $todo = Todo::find($id);
+        return view('admin/todo',compact("todo"));
+          break;
+      }
+      case 'user':{
+        $todo = Todo::find($id);
+        $tasks = [];
+        $idUser = Auth::id();
+        $test = User_task::all()->where("fkUser", $idUser);
+        foreach($test as $t){
+            $task = $t->task()->first();
+            $taskTodo = $task->todo()->first();
+            if ($taskTodo->id = $task->fkTodo && $taskTodo->id == $id){
+              array_push($tasks, $t);
+            }
         }
+        return view('todo', compact("tasks","todo"));
+          break;
+      }
     }
-    return view('todo', compact("tasks","todo"));
   }
 
   /**
