@@ -28,6 +28,7 @@ class TodosController extends Controller
    */
   public function index()
   {
+ 
       $idUser = Auth::id();
       $test = User_task::all()->where("fkUser", $idUser);
       $todos=[];

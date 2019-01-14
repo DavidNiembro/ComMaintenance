@@ -26,9 +26,10 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
         //$todos = Todo::all();
+        $request->user()->authorizeRoles(['user']);
         $todos = [];
         $id = Auth::id();
         $test = User_task::all()->where("fkUser", $id);

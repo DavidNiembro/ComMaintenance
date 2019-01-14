@@ -24,12 +24,12 @@ class CreateForeignKeys extends Migration {
 						->onUpdate('restrict');
 		});
 		Schema::table('role_user', function(Blueprint $table) {
-			$table->foreign('fkRole')->references('id')->on('roles')
+			$table->foreign('role_id')->references('id')->on('roles')
 						->onDelete('restrict')
 						->onUpdate('restrict');
 		});
 		Schema::table('role_user', function(Blueprint $table) {
-			$table->foreign('fkUser')->references('id')->on('users')
+			$table->foreign('user_id')->references('id')->on('users')
 						->onDelete('restrict')
 						->onUpdate('restrict');
 		});
