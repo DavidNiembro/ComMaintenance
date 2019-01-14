@@ -26,22 +26,32 @@ class TodosController extends Controller
    *
    * @return Response
    */
-  public function index()
+  public function index(Request $request)
   {
- 
-      $idUser = Auth::id();
-      $test = User_task::all()->where("fkUser", $idUser);
-      $todos=[];
-      foreach($test as $t){
-        $task = $t->task()->first();
-        $taskTodo = $task->todo()->first();
-        if ($taskTodo->id = $task->fkTodo && !in_array($taskTodo,$todos)){
-
-        
-          array_push($todos, $taskTodo);
-        }
+    $request->user()->authorizeRoles(['admin','user']);
+    $role = $request->user()->roles()->first()->name;
+    switch($role){
+      case 'admin':{
+          $todos = Todo::all();
+          return view('todos',compact("todos"));
+          break;
+      }
+      case 'user':{
+          $todos = [];
+          $idUser = Auth::id();
+          $test = User_task::all()->where("fkUser", $idUser);
+      
+          foreach($test as $t){
+              $task = $t->task()->first();
+              $taskTodo = $task->todo()->first();
+              if ($taskTodo->id = $task->fkTodo && !in_array($taskTodo,$todos)){
+                array_push($todos, $taskTodo);
+              }
+          }
+          return view('todos',compact("todos"));
+          break;
+      }
     }
-      return view('todos', compact("todos"));
   }
 
   /**

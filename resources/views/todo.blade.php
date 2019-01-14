@@ -10,7 +10,7 @@
                     <div>{{$todo->title}}</div>
                         <div class="row">
                             @foreach ($tasks as $tache)
-                            @if($tache->state)
+                            @if(!$tache->state)
                             <div class="col-sm-6" style="margin-top:20px">
                                     <div class="card">
                                         <div class="card-body">
@@ -50,7 +50,7 @@
                     <div>{{$todo->title}}</div>
                         <div class="row">
                             @foreach ($tasks as $tache)
-                            @if(!$tache->state)
+                            @if($tache->state)
                             <div class="col-sm-6" style="margin-top:20px">
                                     <div class="card">
                                         <div class="card-body">

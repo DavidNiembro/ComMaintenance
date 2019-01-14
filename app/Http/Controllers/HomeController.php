@@ -29,19 +29,29 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         //$todos = Todo::all();
-        $request->user()->authorizeRoles(['user']);
-        $todos = [];
-        $id = Auth::id();
-        $test = User_task::all()->where("fkUser", $id);
-       
-        foreach($test as $t){
-            $task = $t->task()->first();
-            $todo = $task->todo()->first();
-            if (!in_array($todo, $todos)){
-                array_push($todos, $todo);
+        $request->user()->authorizeRoles(['admin','user']);
+        $role = $request->user()->roles()->first()->name;
+        switch($role){
+            case 'admin':{
+                $todos = Todo::all();
+                return view('home',compact("todos"));
+                break;
+            }
+            case 'user':{
+                $todos = [];
+                $id = Auth::id();
+                $test = User_task::all()->where("fkUser", $id);
+            
+                foreach($test as $t){
+                    $task = $t->task()->first();
+                    $todo = $task->todo()->first();
+                    if (!in_array($todo, $todos)){
+                        array_push($todos, $todo);
+                    }
+                }
+                return view('home',compact("todos"));
+                break;
             }
         }
-    
-        return view('home',compact("todos"));
     }
 }
