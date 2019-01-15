@@ -11,7 +11,6 @@ class CreateTasksTable extends Migration {
 			$table->increments('id');
 			$table->string('title', 255);
 			$table->text('description')->nullable();
-			$table->boolean('state');
 			$table->timestamps();
 			$table->softDeletes();
 			$table->integer('fkTodo')->unsigned();
