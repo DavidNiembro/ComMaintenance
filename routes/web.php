@@ -20,7 +20,7 @@ Auth::routes();
 Route::resource('todos', 'TodosController');
 Route::get('/todo/{id}', 'TodosController@show')->name("todo");
 Route::get('/todos', 'TodosController@index')->name("todos");
-
+Route::post('/assign', 'TodosController@assign')->name("assign");
 Route::resource('tasks', 'TasksController');
 Route::resource('user_todo', 'User_todoController');
 

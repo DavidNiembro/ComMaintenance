@@ -50,7 +50,6 @@ class TasksController extends Controller
         [
           'title' => $request->title,
           'description' => $request->description,
-          'state'=>$request->state == null ? 0 : $request->state,
           'fkTodo'=>$request->fkTodo
         ]
     );

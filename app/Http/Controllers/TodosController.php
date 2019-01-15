@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Todo;
 use App\User_task;
 use App\Task;
+use App\User;
+
 
 use Illuminate\Support\Facades\Auth;
 class TodosController extends Controller 
@@ -39,12 +41,12 @@ class TodosController extends Controller
       case 'user':{
           $todos = [];
           $idUser = Auth::id();
-          $test = User_task::all()->where("fkUser", $idUser);
-      
-          foreach($test as $t){
-              $task = $t->task()->first();
-              $taskTodo = $task->todo()->first();
-              if ($taskTodo->id = $task->fkTodo && !in_array($taskTodo,$todos)){
+          $UserTask = User_task::all()->where("fkUser", $idUser);
+          foreach($UserTask as $t){
+              $task = Task::find($t->fkTask);
+              $taskTodo = Todo::find($task->fkTodo);
+       
+              if ($taskTodo->id == $task->fkTodo && !in_array($taskTodo,$todos)){
                 array_push($todos, $taskTodo);
               }
           }
@@ -97,7 +99,18 @@ class TodosController extends Controller
     switch($role){
       case 'admin':{
         $todo = Todo::find($id);
-        return view('admin/todo',compact("todo"));
+        $users = User::all();
+        $UserTasks = User_task::all();
+        $tasks = [];
+        foreach($UserTasks as $t){
+          $task = $t->task()->first();
+          $taskTodo = $task->todo()->first();
+          if ($taskTodo->id = $task->fkTodo && $taskTodo->id == $id){
+            array_push($tasks, $t);
+          }
+        }
+
+        return view('admin/todo',compact("todo","users","tasks"));
           break;
       }
       case 'user':{
@@ -108,7 +121,7 @@ class TodosController extends Controller
         foreach($test as $t){
             $task = $t->task()->first();
             $taskTodo = $task->todo()->first();
-            if ($taskTodo->id = $task->fkTodo && $taskTodo->id == $id){
+            if ($taskTodo->id == $task->fkTodo && $taskTodo->id == $id){
               array_push($tasks, $t);
             }
         }
@@ -150,7 +163,31 @@ class TodosController extends Controller
   {
     
   }
-  
+
+   /**
+   * Remove the specified resource from storage.
+   *
+   * @param  int  $id
+   * @return Response
+   */
+  public function assign(Request $request)
+  {
+    $fkTodo = $request->fkTodo;
+    $fkUser = $request->fkUser;
+    $todo = Todo::find($fkTodo);
+    $tasks = $todo->tasks()->get();
+    
+    foreach($tasks as $task){
+      $UserTask = new User_task;
+      $UserTask->fkTask = $task->id;
+      $UserTask->fkUser = $fkUser;
+      $UserTask->beginTask = "2019-01-18 00:00:00";
+      $UserTask->endTask = "2019-01-18 00:00:00";
+      $UserTask->state = 0;
+      $UserTask->save();
+    }
+    return redirect('/todos');
+  }  
 }
 
 ?>

@@ -14,7 +14,7 @@ class Todo extends Model
     use SoftDeletes;
 
     protected $dates = ['deleted_at'];
-    protected $fillable = ['title', 'description']; 
+    protected $fillable = ['id', 'title', 'description']; 
 
     public function tasks()
     {
