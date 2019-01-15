@@ -102,16 +102,17 @@ class TodosController extends Controller
         $users = User::all();
         $UserTasks = User_task::all();
         $tasks = [];
+       
         foreach($UserTasks as $t){
+         //dd($t);
           $task = $t->task()->first();
           $taskTodo = $task->todo()->first();
-          if ($taskTodo->id = $task->fkTodo && $taskTodo->id == $id){
+          if ($taskTodo->id == $id){
             array_push($tasks, $t);
           }
         }
-
         return view('admin/todo',compact("todo","users","tasks"));
-          break;
+        break;
       }
       case 'user':{
         $todo = Todo::find($id);
@@ -126,7 +127,7 @@ class TodosController extends Controller
             }
         }
         return view('todo', compact("tasks","todo"));
-          break;
+        break;
       }
     }
   }
@@ -181,8 +182,8 @@ class TodosController extends Controller
       $UserTask = new User_task;
       $UserTask->fkTask = $task->id;
       $UserTask->fkUser = $fkUser;
-      $UserTask->beginTask = "2019-01-18 00:00:00";
-      $UserTask->endTask = "2019-01-18 00:00:00";
+      $UserTask->beginTask = $request->begin;
+      $UserTask->endTask = $request->end;
       $UserTask->state = 0;
       $UserTask->save();
     }

@@ -20,7 +20,7 @@
                                 </div>
                             </div>
                         </div>
-                @endforeach                           
+                @endforeach   
             </div>
             
             
@@ -80,7 +80,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="description">Au</label>
-                                <input type="date" class="form-control" id="begin" name="end" placeholder="02-02-2018">
+                                <input type="date" class="form-control" id="end" name="end" placeholder="02-02-2018">
                             </div>
                             <input type="text" hidden name="fkTodo" id="fkTodo" value="{{$todo->id}}">
                         </div>
@@ -105,5 +105,14 @@
             </button>
         </div>
     </div>
+   
+    <div class="col-md-12">
+    <div>
+        <h1>Assignations</h1>
+    </div>
+    <div class="row">                
+    </div>
+    </div>
+
 </div>
 @endsection
