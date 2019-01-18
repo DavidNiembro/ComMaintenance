@@ -27,7 +27,7 @@
                                                 <form method="POST" action="{{ url('tasks') }}">
                                                     {{ csrf_field() }}
                                                     <input type="hidden" value="{{$tache->user_task->first()->id}}" name="id">
-                                                    <input type="hidden" value="{{$tache->user_task->first()->fkTodo}}" name="fkTodo">
+                                                    <input type="hidden" value="{{$tache->fkTodo}}" name="fkTodo">
                                                     <button type="submit" class="btn btn-primary">C'est fait</button>
                                                 </form>
                                             </div>
