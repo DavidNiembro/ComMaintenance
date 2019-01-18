@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Todo;
 use App\Task;
+use App\User_task;
 
 class TasksController extends Controller 
 {
@@ -45,17 +46,12 @@ class TasksController extends Controller
    */
   public function store(Request $request)
   {
-      $task = Task::updateOrCreate(
-        ['id' => $request->id],
-        [
-          'title' => $request->title,
-          'description' => $request->description,
-          'fkTodo'=>$request->fkTodo
-        ]
-    );
+
+    $userTask = User_task::find($request->id);
+    $userTask->state = 1;
+    $userTask->save();
+
     return redirect()->route('todo', ['id' => $request->fkTodo]);
-
-
   }
 
   /**
@@ -77,6 +73,7 @@ class TasksController extends Controller
    */
   public function edit($id)
   {
+   
   }
 
   /**
@@ -87,7 +84,6 @@ class TasksController extends Controller
    */
   public function update($id)
   {
-    dd($id);
 
   }
 

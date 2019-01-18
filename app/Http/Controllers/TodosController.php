@@ -39,17 +39,11 @@ class TodosController extends Controller
           break;
       }
       case 'user':{
-          $todos = [];
           $idUser = Auth::id();
-          $UserTask = User_task::all()->where("fkUser", $idUser);
-          foreach($UserTask as $t){
-              $task = Task::find($t->fkTask);
-              $taskTodo = Todo::find($task->fkTodo);
-       
-              if ($taskTodo->id == $task->fkTodo && !in_array($taskTodo,$todos)){
-                array_push($todos, $taskTodo);
-              }
-          }
+          $todos = Todo::with(['tasks','tasks.user_task'])->whereHas('tasks.user_task', function($query) use($idUser) {
+            $query->where("fkUser",$idUser);
+          })->get();          
+
           return view('todos',compact("todos"));
           break;
       }
@@ -74,9 +68,7 @@ class TodosController extends Controller
   public function store(Request $request)
   {
     $task = Todo::updateOrCreate(
-      [
-        'id' => $request->id
-      ],
+      ['id' => $request->id],
       [
         'title' => $request->title,
         'description' => $request->description
@@ -98,35 +90,25 @@ class TodosController extends Controller
     $role = $request->user()->roles()->first()->name;
     switch($role){
       case 'admin':{
-        $todo = Todo::find($id);
-        $users = User::all();
-        $UserTasks = User_task::all();
-        $tasks = [];
-       
-        foreach($UserTasks as $t){
-         //dd($t);
-          $task = $t->task()->first();
-          $taskTodo = $task->todo()->first();
-          if ($taskTodo->id == $id){
-            array_push($tasks, $t);
-          }
-        }
-        return view('admin/todo',compact("todo","users","tasks"));
+        $users = User::with('roles')->whereHas('roles', function($query) {
+          $query->where("name","!=","admin");
+        })->get();
+
+        $todo = Todo::with(['tasks','tasks.user_task'])->where('id',$id)->first();
+
+        return view('admin/todo',compact("todo","users"));
         break;
       }
       case 'user':{
         $todo = Todo::find($id);
-        $tasks = [];
         $idUser = Auth::id();
-        $test = User_task::all()->where("fkUser", $idUser);
-        foreach($test as $t){
-            $task = $t->task()->first();
-            $taskTodo = $task->todo()->first();
-            if ($taskTodo->id == $task->fkTodo && $taskTodo->id == $id){
-              array_push($tasks, $t);
-            }
-        }
-        return view('todo', compact("tasks","todo"));
+
+        $todo = Todo::with(['tasks','tasks.user_task'])->where('id',$id)->whereHas('tasks.user_task', function($query) use($idUser) {
+          $query->where("fkUser",$idUser);
+        })->first();  
+
+        return view('todo', compact("todo"));
+
         break;
       }
     }

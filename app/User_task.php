@@ -14,12 +14,15 @@ class User_task extends Model
     use SoftDeletes;
 
     protected $dates = ['deleted_at'];
-    protected $fillable = ['fkTask']; 
+    protected $fillable = ['fkTask','state']; 
 
     public function task()
     {
         return $this->belongsTo('App\Task', 'fkTask', 'id');
     }
-   
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'fkUser', 'id');
+    }
 
 }
