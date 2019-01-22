@@ -11,33 +11,39 @@
                 <p>{{$todo->description}}</p>
             </div>
             <div class="row">
-                @foreach ($todo->tasks as $tache)
-                    @if(!$tache->user_task->first()->state)
-                        <div class="col-sm-4" style="margin-top:20px">
-                            <div class="card">
-                                <div class="card-body">
-                                <h5 class="card-title">{{ $tache->title }}</h5>
-                                <p class="card-text">{{ $tache->description }}</p>
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <p class="card-text">{{ $tache->user_task->first()->state ? "Terminée":"A faire"}}</p>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <form method="POST" action="{{ url('tasks') }}">
-                                                    {{ csrf_field() }}
-                                                    <input type="hidden" value="{{$tache->user_task->first()->id}}" name="id">
-                                                    <input type="hidden" value="{{$tache->fkTodo}}" name="fkTodo">
-                                                    <button type="submit" class="btn btn-primary">C'est fait</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-                @endforeach
+            <table class="table">
+                <thead>
+                    <tr>
+                    <th scope="col">Titre</th>
+                    <th scope="col" class="text-center">Description</th>
+                    <th scope="col" class="text-center">Date de fin</th>
+                    <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($todo->tasks as $tache)
+                        @foreach ($tache->user_task as $user_task)
+                            @if(!$user_task->state)
+                                <a href="/todo/{{ $todo->id }}">
+                                    <tr>
+                                    <td>{{ $tache->title }}</td>
+                                    <td class="text-center">{{ $tache->description }}</td>
+                                    <td class="text-center">{{ $user_task->endTask }}</td>
+                                    <td> 
+                                        <form method="POST" action="{{ url('tasks') }}">
+                                            {{ csrf_field() }}
+                                            <input type="hidden" value="{{$user_task->id}}" name="id">
+                                            <input type="hidden" value="{{$tache->fkTodo}}" name="fkTodo">
+                                            <button type="submit" class="btn btn-primary">C'est fait</button>
+                                        </form>
+                                    </td>
+                                    </tr>
+                                </a>    
+                            @endif
+                        @endforeach
+                    @endforeach
+                </tbody>
+            </table> 
             </div>          
         </div>
         <div class="col-md-12">
@@ -45,18 +51,28 @@
                 <h2>Historique</h2>
             </div>
             <div class="row">
-                @foreach ($todo->tasks as $tache)
-                    @if($tache->user_task->first()->state)
-                        <div class="col-sm-4" style="margin-top:20px">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ $tache->title }}</h5>
-                                    <p class="card-text">{{ $tache->description }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-                @endforeach
+            <table class="table">
+                <thead>
+                    <tr>
+                    <th scope="col">Titre</th>
+                    <th scope="col" class="text-center">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($todo->tasks as $tache)
+                        @foreach ($tache->user_task as $user_task)
+                            @if($user_task->state)
+                                <a href="/todo/{{ $todo->id }}">
+                                    <tr>
+                                    <td>{{ $tache->title }}</td>
+                                    <td class="text-center">{{ $tache->description }}</td>
+                                    </tr>
+                                </a>    
+                            @endif
+                        @endforeach
+                    @endforeach
+                </tbody>
+            </table> 
             </div>          
         </div>
     </div> 
