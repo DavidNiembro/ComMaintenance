@@ -7,7 +7,7 @@ use App\Todo;
 use App\User_task;
 use App\Task;
 use App\User;
-
+use Carbon\Carbon;
 
 use Illuminate\Support\Facades\Auth;
 class TodosController extends Controller 
@@ -42,8 +42,23 @@ class TodosController extends Controller
           $idUser = Auth::id();
           $todos = Todo::with(['tasks','tasks.user_task'])->whereHas('tasks.user_task', function($query) use($idUser) {
             $query->where("fkUser",$idUser);
-          })->get();          
-
+          })->get();    
+          foreach($todos as $key=>$todo){
+            $todoEndTask = Carbon::minValue();
+            $countTask = 0;
+            foreach($todo->tasks as $task){
+              foreach($task->user_task as $userTask){
+                if(!$userTask->state){
+                  $countTask++;
+                }
+                if(Carbon::createFromTimeString($userTask->endTask)>Carbon::createFromTimeString($todoEndTask)){
+                  $todoEndTask = $userTask->endTask;
+                  $todos[$key]->endDate = $todoEndTask;
+                }
+              }
+            }
+            $todos[$key]->countTask = $countTask;
+          }
           return view('todos',compact("todos"));
           break;
       }
