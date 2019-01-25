@@ -115,14 +115,25 @@ class TodosController extends Controller
         break;
       }
       case 'user':{
-        $todo = Todo::find($id);
         $idUser = Auth::id();
-
         $todo = Todo::with(['tasks','tasks.user_task'])->where('id',$id)->whereHas('tasks.user_task', function($query) use($idUser) {
           $query->where("fkUser",$idUser);
+          $query->groupBy('beginTask');
         })->first();  
-
-        return view('todo', compact("todo"));
+        $histories = [];
+        foreach($todo->tasks as $tache){
+          foreach ($tache->user_task as $user_task){
+            if($user_task->state){
+              if(array_key_exists($user_task->beginTask,$histories)){
+                array_push($histories[$user_task->beginTask], $tache);
+              }else{
+                $histories[$user_task->beginTask]= [];
+                array_push($histories[$user_task->beginTask], $tache);
+              }
+            }
+          }
+        }
+        return view('todo', compact("todo","histories"));
 
         break;
       }

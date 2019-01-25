@@ -28,7 +28,7 @@
                                     <tr>
                                     <td>{{ $tache->title }}</td>
                                     <td class="text-center">{{ $tache->description }}</td>
-                                    <td class="text-center">{{ $user_task->endTask }}</td>
+                                    <td class="text-center">{{ \Carbon\Carbon::createFromTimeString($user_task->endTask)->format('d M Y') }}</td>
                                     <td> 
                                         <form method="POST" action="{{ url('tasks') }}">
                                             {{ csrf_field() }}
@@ -55,20 +55,27 @@
                 <thead>
                     <tr>
                     <th scope="col">Titre</th>
+                    <th scope="col">Date</th>
                     <th scope="col" class="text-center">Description</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($todo->tasks as $tache)
-                        @foreach ($tache->user_task as $user_task)
-                            @if($user_task->state)
-                                <a href="/todo/{{ $todo->id }}">
+                    @foreach ($histories as $key => $history)
+                    <tr>
+                    <th scope="col">{{ \Carbon\Carbon::createFromTimeString($key)->format('d M Y') }}</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    </tr>
+                        @foreach ($history as $tasks)
+                            
+                            
                                     <tr>
-                                    <td>{{ $tache->title }}</td>
-                                    <td class="text-center">{{ $tache->description }}</td>
+                                        <td>{{ $tasks->title }}</td>
+                                        <td class="text-center">{{ $tasks->description }}</td>
+                                        <td>{{ $tasks->description }}</td>
                                     </tr>
-                                </a>    
-                            @endif
+                            
+                           
                         @endforeach
                     @endforeach
                 </tbody>
