@@ -55,7 +55,7 @@
                 <thead>
                     <tr>
                     <th scope="col">Titre</th>
-                    <th scope="col">Date</th>
+                    <th scope="col" class="text-center">Date</th>
                     <th scope="col" class="text-center">Description</th>
                     </tr>
                 </thead>
@@ -67,15 +67,11 @@
                     <th scope="col"></th>
                     </tr>
                         @foreach ($history as $tasks)
-                            
-                            
                                     <tr>
                                         <td>{{ $tasks->title }}</td>
-                                        <td class="text-center">{{ $tasks->description }}</td>
+                                        <td class="text-center">{{ $tasks->user_task->first()->finishTask }}</td>
                                         <td>{{ $tasks->description }}</td>
                                     </tr>
-                            
-                           
                         @endforeach
                     @endforeach
                 </tbody>

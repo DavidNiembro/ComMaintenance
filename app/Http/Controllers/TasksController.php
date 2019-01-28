@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Todo;
 use App\Task;
 use App\User_task;
+use Carbon\Carbon;
 
 class TasksController extends Controller 
 {
@@ -49,6 +50,7 @@ class TasksController extends Controller
 
     $userTask = User_task::find($request->id);
     $userTask->state = 1;
+    $userTask->finishTask = Carbon::now();
     $userTask->save();
 
     return redirect()->route('todo', ['id' => $request->fkTodo]);

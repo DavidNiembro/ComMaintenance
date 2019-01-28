@@ -109,6 +109,25 @@
     <div class="col-md-12">
     <div>
         <h1>Assignations</h1>
+        <div class="row">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col" >Date</th>
+                        <th scope="col">Utilisateur</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($histories as $key => $history)
+                        <tr>
+                            <td>{{ \Carbon\Carbon::createFromTimeString($key)->format('d M Y') }} </td>
+                            <td>{{$history[0]->user_task->first()->user->name}} </td>
+                        </tr>
+                    @endforeach
+                    
+                </tbody>
+            </table> 
+        </div>   
     </div>
     <div class="row">                
     </div>

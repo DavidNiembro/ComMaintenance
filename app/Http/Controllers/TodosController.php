@@ -109,16 +109,33 @@ class TodosController extends Controller
           $query->where("name","!=","admin");
         })->get();
 
-        $todo = Todo::with(['tasks','tasks.user_task'])->where('id',$id)->first();
+        $todo = Todo::with(['tasks','tasks.user_task','tasks.user_task.user'])->where('id',$id)->first();
+        $histories = [];
+        foreach($todo->tasks as $keyt=>$tache){
+          $finished = 0; 
+          foreach ($tache->user_task as $key=>$user_task){
+              if(array_key_exists($user_task->beginTask,$histories)){
+                array_push($histories[$user_task->beginTask], $tache);
+                if($user_task->finishTask != null || $user_task->finishTask != ''){
+                  $finished += 1; 
+                }
+              }else{
+                $histories[$user_task->beginTask]= [];
+                array_push($histories[$user_task->beginTask], $tache);
+                if($user_task->finishTask != null || $user_task->finishTask != ''){
+                  $finished += 1; 
+                }
+              }
+          }
+        }
 
-        return view('admin/todo',compact("todo","users"));
+        return view('admin/todo',compact("todo","users","histories"));
         break;
       }
       case 'user':{
         $idUser = Auth::id();
         $todo = Todo::with(['tasks','tasks.user_task'])->where('id',$id)->whereHas('tasks.user_task', function($query) use($idUser) {
           $query->where("fkUser",$idUser);
-          $query->groupBy('beginTask');
         })->first();  
         $histories = [];
         foreach($todo->tasks as $tache){

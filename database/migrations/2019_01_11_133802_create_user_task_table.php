@@ -15,6 +15,7 @@ class CreateUserTaskTable extends Migration {
 			$table->integer('fkUser')->unsigned();
 			$table->datetime('beginTask');
 			$table->datetime('endTask');
+			$table->datetime('finishTask')->nullable();
 			$table->boolean('state');
 		});
 	}
