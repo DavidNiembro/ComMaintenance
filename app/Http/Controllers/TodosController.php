@@ -32,6 +32,7 @@ class TodosController extends Controller
   {
     $request->user()->authorizeRoles(['admin','user']);
     $role = $request->user()->roles()->first()->name;
+    $idUser = Auth::id();
     switch($role){
       case 'admin':{
           $todos = Todo::all();
@@ -39,7 +40,6 @@ class TodosController extends Controller
           break;
       }
       case 'user':{
-          $idUser = Auth::id();
           $todos = Todo::with(['tasks','tasks.user_task'])->whereHas('tasks.user_task', function($query) use($idUser) {
             $query->where("fkUser",$idUser);
           })->get();    
@@ -48,7 +48,7 @@ class TodosController extends Controller
             $countTask = 0;
             foreach($todo->tasks as $task){
               foreach($task->user_task as $userTask){
-                if(!$userTask->state){
+                if(!$userTask->state && $userTask->fkUser==$idUser){
                   $countTask++;
                 }
                 if(Carbon::createFromTimeString($userTask->endTask)>Carbon::createFromTimeString($todoEndTask)){
@@ -103,6 +103,7 @@ class TodosController extends Controller
   {
     $request->user()->authorizeRoles(['admin','user']);
     $role = $request->user()->roles()->first()->name;
+    $idUser = Auth::id();
     switch($role){
       case 'admin':{
         $users = User::with('roles')->whereHas('roles', function($query) {
@@ -132,15 +133,14 @@ class TodosController extends Controller
         return view('admin/todo',compact("todo","users","histories"));
         break;
       }
-      case 'user':{
-        $idUser = Auth::id();
-        $todo = Todo::with(['tasks','tasks.user_task'])->where('id',$id)->whereHas('tasks.user_task', function($query) use($idUser) {
-          $query->where("fkUser",$idUser);
-        })->first();  
+      case 'user':{       
+        $todo = Todo::with(['tasks','tasks.User_task'])->where('id',$id)->whereHas('tasks.User_task', function($query) use($idUser) { 
+        })->first(); 
+        //dd($todo); 
         $histories = [];
         foreach($todo->tasks as $tache){
           foreach ($tache->user_task as $user_task){
-            if($user_task->state){
+            if($user_task->state && $user_task->fkUser == $idUser){
               if(array_key_exists($user_task->beginTask,$histories)){
                 array_push($histories[$user_task->beginTask], $tache);
               }else{
@@ -150,7 +150,7 @@ class TodosController extends Controller
             }
           }
         }
-        return view('todo', compact("todo","histories"));
+        return view('todo', compact("todo","histories","idUser"));
 
         break;
       }

@@ -23,7 +23,7 @@
                 <tbody>
                     @foreach ($todo->tasks as $tache)
                         @foreach ($tache->user_task as $user_task)
-                            @if(!$user_task->state)
+                            @if(!$user_task->state && $user_task->fkUser == $idUser)
                                 <a href="/todo/{{ $todo->id }}">
                                     <tr>
                                     <td>{{ $tache->title }}</td>
@@ -69,7 +69,7 @@
                         @foreach ($history as $tasks)
                                     <tr>
                                         <td>{{ $tasks->title }}</td>
-                                        <td class="text-center">{{ $tasks->user_task->first()->finishTask }}</td>
+                                        <td class="text-center">{{ \Carbon\Carbon::createFromTimeString($tasks->user_task->first()->finishTask)->format('d M Y')  }}</td>
                                         <td>{{ $tasks->description }}</td>
                                     </tr>
                         @endforeach
