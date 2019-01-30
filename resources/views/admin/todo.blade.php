@@ -69,18 +69,15 @@
                         </div>
                         <div class="modal-body">
                             {{ csrf_field() }}
+                            <label for="fkUser">Utilisateur</label>
                             <select name="fkUser" class="form-control" >
                                 @foreach($users as $user)
                                     <option value="{{$user->id}}">{{$user->name}} {{$user->firstname}}</option>
                                 @endforeach
                             </select>
                             <div class="form-group">
-                                <label for="description">Du</label>
-                                <input type="date" class="form-control" id="begin" name="begin" placeholder="02-02-2018">
-                            </div>
-                            <div class="form-group">
-                                <label for="description">Au</label>
-                                <input type="date" class="form-control" id="end" name="end" placeholder="02-02-2018">
+                                <label for="begin">Date</label>
+                                <input type="date" class="form-control" min="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" id="begin" name="begin" placeholder="02-02-2018">
                             </div>
                             <input type="text" hidden name="fkTodo" id="fkTodo" value="{{$todo->id}}">
                         </div>

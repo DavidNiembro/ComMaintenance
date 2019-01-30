@@ -208,7 +208,7 @@ class TodosController extends Controller
       $UserTask->fkTask = $task->id;
       $UserTask->fkUser = $fkUser;
       $UserTask->beginTask = $request->begin;
-      $UserTask->endTask = $request->end;
+      $UserTask->endTask = $request->begin;
       $UserTask->state = 0;
       $UserTask->save();
     }
