@@ -30,14 +30,24 @@ class TodosController extends Controller
    */
   public function index(Request $request)
   {
+    //is Authorised ?
     $request->user()->authorizeRoles(['admin','user']);
+    
+    //Get Roles
     $role = $request->user()->roles()->first()->name;
     $idUser = Auth::id();
+
     switch($role){
       case 'admin':{
+
+          //Collect all todos
           $todos = Todo::all();
+
+          //Collect the last finish date
           foreach($todos as $key => $todo){
+
             $lastDate = null;
+
             foreach($todo->tasks()->get() as $task){
               foreach($task->user_task()->get() as $user_task){
                   if($lastDate < $user_task->finishTask){
@@ -52,9 +62,13 @@ class TodosController extends Controller
           break;
       }
       case 'user':{
+
+        //collect todos for the user
           $todos = Todo::with(['tasks','tasks.user_task'])->whereHas('tasks.user_task', function($query) use($idUser) {
             $query->where("fkUser",$idUser);
-          })->get();    
+          })->get();
+
+          //Collect remaining task
           foreach($todos as $key=>$todo){
             $todoEndTask = Carbon::minValue();
             $countTask = 0;
@@ -113,26 +127,38 @@ class TodosController extends Controller
    */
   public function show($id, Request $request)
   {
+    //is Authorised ?
     $request->user()->authorizeRoles(['admin','user']);
+    
+    //Get Roles
     $role = $request->user()->roles()->first()->name;
     $idUser = Auth::id();
+    
     switch($role){
       case 'admin':{
+
+        //Collect all users
         $users = User::with('roles')->whereHas('roles', function($query) {
           $query->where("name","!=","admin");
         })->get();
 
+        //Collect todo
         $todo = Todo::with(['tasks','tasks.user_task','tasks.user_task.user'])->where('id',$id)->first();
         $histories = [];
+
+        //Create an history 
         foreach($todo->tasks as $keyt=>$tache){
           $finished = 0; 
           foreach ($tache->user_task as $key=>$user_task){
+
               if(array_key_exists($user_task->beginTask,$histories)){
+
                 array_push($histories[$user_task->beginTask], $tache);
                 if($user_task->finishTask != null || $user_task->finishTask != ''){
                   $finished += 1; 
                 }
               }else{
+
                 $histories[$user_task->beginTask]= [];
                 array_push($histories[$user_task->beginTask], $tache);
                 if($user_task->finishTask != null || $user_task->finishTask != ''){
@@ -144,10 +170,13 @@ class TodosController extends Controller
         return view('admin/todo',compact("todo","users","histories"));
         break;
       }
-      case 'user':{       
+      case 'user':{ 
+        
+        //Collect Todo
         $todo = Todo::with(['tasks','tasks.User_task'])->where('id',$id)->whereHas('tasks.User_task', function($query) use($idUser) { 
         })->first(); 
-        //dd($todo); 
+
+        //create an history
         $histories = [];
         foreach($todo->tasks as $tache){
           foreach ($tache->user_task as $user_task){

@@ -47,7 +47,6 @@ class TasksController extends Controller
    */
   public function store(Request $request)
   {
-
     $userTask = User_task::find($request->id);
     $userTask->state = 1;
     $userTask->finishTask = Carbon::now();
