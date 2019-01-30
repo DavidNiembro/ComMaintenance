@@ -36,6 +36,18 @@ class TodosController extends Controller
     switch($role){
       case 'admin':{
           $todos = Todo::all();
+          foreach($todos as $key => $todo){
+            $lastDate = null;
+            foreach($todo->tasks()->get() as $task){
+              foreach($task->user_task()->get() as $user_task){
+                  if($lastDate < $user_task->finishTask){
+                    $lastDate = $user_task->finishTask;
+                  }
+              }
+            }
+            $todos[$key]->lastDate = $lastDate;
+          }
+  
           return view('admin/todos',compact("todos"));
           break;
       }
@@ -129,7 +141,6 @@ class TodosController extends Controller
               }
           }
         }
-
         return view('admin/todo',compact("todo","users","histories"));
         break;
       }

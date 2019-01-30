@@ -9,6 +9,7 @@
     <tr>
       <th scope="col">Titre</th>
       <th scope="col" class="text-center">Nombre de tâches</th>
+      <th scope="col" class="text-center">Dernière tâche terminée le</th>
       <th scope="col">Actions</th>
     </tr>
   </thead>
@@ -18,6 +19,7 @@
         <tr>
             <td>{{ $todo->title }}</td>
             <td class="text-center">{{ count($todo->tasks) }}</td>
+            <td class="text-center">{{ $todo->lastDate ? \Carbon\Carbon::createFromTimeString($todo->lastDate)->format('d M Y'):'Pas encore de date' }}</td>
             <td><a href="/todo/{{ $todo->id }}" class="btn btn-primary">Voir</a></td>
         </tr>
     </a>
