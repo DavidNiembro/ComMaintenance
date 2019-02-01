@@ -34,7 +34,7 @@
      
             <!-- Modal -->
             <div class="modal fade" id="createTask" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <form action="{{ url('tasks') }}" method="POST">
+            <form action="{{ url('tasks/create') }}" method="POST">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">

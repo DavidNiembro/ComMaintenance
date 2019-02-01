@@ -24,5 +24,6 @@ Route::post('/assign', 'TodosController@assign')->name("assign");
 Route::resource('tasks', 'TasksController');
 Route::resource('user_todo', 'User_todoController');
 Route::post('tasks/deleteTask', 'TasksController@delete');
+Route::post('tasks/create', 'TasksController@create');
 
 Route::get('/home', 'HomeController@index')->name('home');

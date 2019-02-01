@@ -35,8 +35,15 @@ class TasksController extends Controller
    *
    * @return Response
    */
-  public function create()
+  public function create(Request $request)
   {
+    $task = new Task;
+    $task->title = $request->title;
+    $task->description = $request->description;
+    $task->fkTodo = $request->fkTodo;
+    $task->save();
+
+    return redirect()->route('todo', ['id' => $request->fkTodo]);
     
   }
 
