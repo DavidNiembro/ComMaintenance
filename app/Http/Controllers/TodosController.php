@@ -57,10 +57,13 @@ class TodosController extends Controller
             }
             $todos[$key]->lastDate = $lastDate;
           }
+
+          //Collect all tasks for the users
           $listUserTasks = User_Task::with(['user','task' => function($query) { 
             $query->withTrashed();
             },'task.todo'])->orderBy('endTask', 'ASC')->get();
           
+          //Collect all tasks delayed 
           $now = Carbon::yesterday();
           $listUserDelayedTasks = User_Task::with(['user','task' => function($query) use($now) { 
               $query->withTrashed();
@@ -91,6 +94,8 @@ class TodosController extends Controller
                 }
               }
             }
+
+            //Task finished ?
             if($countTask==0){
               $todos[$key]->countLibelle = 'Terminé';
             }else if($countTask == count($todo->tasks)){
@@ -101,6 +106,7 @@ class TodosController extends Controller
             $todos[$key]->countTask = $countTask;
           }
 
+          //Collect all task for this user
           $listUserTasks = User_Task::with(['user','task' => function($query) { 
             $query->withTrashed();
             },'task.todo'])->where('fkUser',Auth::id())->orderBy('endTask', 'ASC')->get();
