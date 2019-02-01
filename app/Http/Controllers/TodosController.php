@@ -61,9 +61,10 @@ class TodosController extends Controller
             $query->withTrashed();
             },'task.todo'])->orderBy('endTask', 'ASC')->get();
           
-          $listUserDelayedTasks = User_Task::with(['user','task' => function($query) { 
+          $now = Carbon::yesterday();
+          $listUserDelayedTasks = User_Task::with(['user','task' => function($query) use($now) { 
               $query->withTrashed();
-            },'task.todo'])->where('finishTask','=',null)->where('endTask','<', new Carbon)->orderBy('endTask', 'ASC')->get();
+            },'task.todo'])->where('finishTask','=',null)->where('endTask','<', $now )->orderBy('endTask', 'ASC')->get();
   
           return view('admin/todos',compact("todos",'listUserTasks', 'listUserDelayedTasks'));
           break;

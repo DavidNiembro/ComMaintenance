@@ -44,19 +44,17 @@
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">Tâche</th>
-            <th scope="col" class="text-center">Utilisateur</th>
+            <th scope="col" class="text-center">Tâche</th>
             <th scope="col" class="text-center">Todo</th>
-              <th scope="col" class="text-center">A finir pour</th>
+            <th scope="col" class="text-center">A finir pour</th>
           </tr>
         </thead>
         <tbody>
           @foreach ($listUserTasks as $user_task)
               <tr>
                   <td class="text-center">{{ $user_task->task->title }}</td>
-                  <td class="text-center">{{ $user_task->user->name }}</td>
                   <td class="text-center">{{ $user_task->task->todo->title }}</td>
-                  <td class="text-center">{{ \Carbon\Carbon::createFromTimeString($user_task->endTask)->format('d M Y') }}</td>
+                  <td class="text-center">{{ $user_task->state ? "Terminé" : \Carbon\Carbon::createFromTimeString($user_task->endTask)->format('d M Y') }}</td>
               </tr>
           @endforeach
         </tbody>
