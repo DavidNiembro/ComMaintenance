@@ -22,7 +22,7 @@
         <td>{{ $todo->title }}</td>
         <td class="text-center">{{ count($todo->tasks) }}</td>
         <td class="text-center">{{ \Carbon\Carbon::createFromTimeString($todo->endDate)->format('d M Y') }}</td>
-        <td class="text-center">{{ $todo->countTask > 0 ? 'En cours' : 'Terminé'}}</td>
+        <td class="text-center">{{ $todo->countLibelle}}</td>
         <td class="text-center">{{ $todo->countTask}}</td>
         <td><a href="/todo/{{ $todo->id }}" class="btn btn-primary">Voir</a></td>
         </tr>

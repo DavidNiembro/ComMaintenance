@@ -98,6 +98,20 @@ class TasksController extends Controller
   {
     
   }
+
+   /**
+   * Remove the specified resource from storage.
+   *
+   * @param  int  $id
+   * @return Response
+   */
+  public function delete(Request $request)
+  {
+      $task = Task::find($request->idTask);
+      $task->delete();
+
+      return redirect()->route('todo', ['id' => $request->fkTodo]);
+  }
   
 }
 

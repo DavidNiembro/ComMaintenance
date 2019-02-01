@@ -14,7 +14,7 @@ class User_task extends Model
     use SoftDeletes;
 
     protected $dates = ['deleted_at'];
-    protected $fillable = ['fkTask','state']; 
+    protected $fillable = ['fkTask','state','finishTask']; 
 
     public function task()
     {

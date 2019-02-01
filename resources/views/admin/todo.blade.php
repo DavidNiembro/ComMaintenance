@@ -12,14 +12,20 @@
             </div>
             <div class="row"> 
                 @foreach($todo->tasks as $task)
-                    <div class="col-sm-12" style="margin-top:20px">
+                    <form action="{{ url('tasks/deleteTask') }}" method="POST">
+                      {{ csrf_field() }}
+                        <div class="col-sm-12" style="margin-top:20px">
                             <div class="card">
                                 <div class="card-body">
-                                <h5 class="card-title">{{ $task->title }}</h5>
-                                <p class="card-text">{{ $task->description }}</p>
+                                    <h5 class="card-title">{{ $task->title }}</h5>
+                                    <p class="card-text">{{ $task->description }}</p>
+                                    <input type="text" hidden name="idTask" id="idTask" value="{{$task->id}}">
+                                    <input type="text" hidden name="fkTodo" id="fkTodo" value="{{$todo->id}}">
+                                    <button type="sumbit">Supprimer</button>
                                 </div>
                             </div>
                         </div>
+                    </form>
                 @endforeach   
             </div>
             

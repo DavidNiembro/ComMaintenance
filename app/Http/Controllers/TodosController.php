@@ -83,6 +83,13 @@ class TodosController extends Controller
                 }
               }
             }
+            if($countTask==0){
+              $todos[$key]->countLibelle = 'Terminé';
+            }else if($countTask == count($todo->tasks)){
+              $todos[$key]->countLibelle = "A faire";
+            }else{
+              $todos[$key]->countLibelle = "En cours";
+            };
             $todos[$key]->countTask = $countTask;
           }
           return view('todos',compact("todos"));
@@ -173,12 +180,15 @@ class TodosController extends Controller
       case 'user':{ 
         
         //Collect Todo
-        $todo = Todo::with(['tasks','tasks.User_task'])->where('id',$id)->whereHas('tasks.User_task', function($query) use($idUser) { 
-        })->first(); 
+        $todo = Todo::with(['tasks','tasks.User_task'])->where('id',$id)->first(); 
+
+        $todos = Todo::with(['tasks' => function($query) { 
+          $query->withTrashed();
+          },'tasks.User_task'])->where('id',$id)->first(); 
 
         //create an history
         $histories = [];
-        foreach($todo->tasks as $tache){
+        foreach($todos->tasks as $tache){
           foreach ($tache->user_task as $user_task){
             if($user_task->state && $user_task->fkUser == $idUser){
               if(array_key_exists($user_task->beginTask,$histories)){
