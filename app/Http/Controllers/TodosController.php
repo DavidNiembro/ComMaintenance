@@ -57,8 +57,15 @@ class TodosController extends Controller
             }
             $todos[$key]->lastDate = $lastDate;
           }
+          $listUserTasks = User_Task::with(['user','task' => function($query) { 
+            $query->withTrashed();
+            },'task.todo'])->orderBy('endTask', 'ASC')->get();
+          
+          $listUserDelayedTasks = User_Task::with(['user','task' => function($query) { 
+              $query->withTrashed();
+            },'task.todo'])->where('finishTask','=',null)->where('endTask','<', new Carbon)->orderBy('endTask', 'ASC')->get();
   
-          return view('admin/todos',compact("todos"));
+          return view('admin/todos',compact("todos",'listUserTasks', 'listUserDelayedTasks'));
           break;
       }
       case 'user':{
@@ -92,7 +99,12 @@ class TodosController extends Controller
             };
             $todos[$key]->countTask = $countTask;
           }
-          return view('todos',compact("todos"));
+
+          $listUserTasks = User_Task::with(['user','task' => function($query) { 
+            $query->withTrashed();
+            },'task.todo'])->where('fkUser',Auth::id())->orderBy('endTask', 'ASC')->get();
+
+          return view('todos',compact("todos", "listUserTasks"));
           break;
       }
     }
